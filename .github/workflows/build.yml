@@ -74,3 +74,8 @@
           run: mvn --batch-mode deploy -DskipTests
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                            - name: Upload artifact for deployment job
+                            uses: actions/upload-artifact@v3
+                            with:
+                              name: my-java-app
+                              path: '${{ github.workspace }}/target/*.jar'
