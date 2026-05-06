@@ -1,0 +1,157 @@
+<div class="ev-creation">
+
+  <a class="ev-creation__back" routerLink="/evenements">
+    <mat-icon>arrow_back</mat-icon>
+    Retour aux événements
+  </a>
+
+  <header class="ev-creation__header">
+    <div class="ev-creation__header-icon">
+      <mat-icon>event_note</mat-icon>
+    </div>
+    <div>
+      <h1 class="ev-creation__title">Nouvel événement</h1>
+      <p class="ev-creation__sub">
+        Remplissez les informations ci-dessous pour créer votre événement.
+      </p>
+    </div>
+  </header>
+
+  <form class="ev-creation__form" #creationForm="ngForm" novalidate>
+
+    <!-- Informations générales -->
+    <section class="ev-section">
+      <div class="ev-section__label">
+        <mat-icon>info_outline</mat-icon>
+        <span>Informations générales</span>
+      </div>
+      <div class="ev-section__fields">
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Titre de l'événement</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput [(ngModel)]="evenement.infoDto!.titre"
+                 name="titre" required #titre="ngModel"/>
+          @if (titre.invalid && titre.touched) {
+            <mat-error>Le titre est requis.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Description</mat-label>
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea matInput [(ngModel)]="evenement.infoDto.description"
+                    name="description" rows="4"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Localisation</mat-label>
+          <mat-icon matPrefix>place</mat-icon>
+          <input matInput [(ngModel)]="evenement.infoDto.localisation"
+                 name="localisation" required #localisation="ngModel"/>
+          @if (localisation.invalid && localisation.touched) {
+            <mat-error>La localisation est requise.</mat-error>
+          }
+        </mat-form-field>
+
+      </div>
+    </section>
+
+    <!-- Dates & horaires -->
+    <section class="ev-section">
+      <div class="ev-section__label">
+        <mat-icon>calendar_month</mat-icon>
+        <span>Dates & horaires</span>
+      </div>
+
+      <div class="ev-section__fields ev-section__fields--row">
+
+        <!-- Début -->
+        <div class="ev-date-picker field-half">
+          <mat-form-field appearance="outline">
+            <mat-label>Date de début</mat-label>
+            <mat-icon matPrefix>event</mat-icon>
+            <input
+              matInput
+              [matDatepicker]="pickerDebut"
+              [value]="toDate(evenement.datesDto.dateDebutEvenement)"
+              (dateChange)="onDateDebutChange($event.value)"
+              readonly
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"/>
+            <mat-datepicker #pickerDebut/>
+            @if (evenement.datesDto.dateDebutEvenement && creationForm.submitted) {
+              <mat-error>La date de début est requise.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure début</mat-label>
+            <input
+              matInput
+              type="time"
+              [value]="toTimeString(evenement.datesDto.dateDebutEvenement)"
+              (change)="onHeureDebutChange($event)"
+            />
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Fin -->
+        <div class="ev-date-picker field-half">
+          <mat-form-field appearance="outline">
+            <mat-label>Date de fin</mat-label>
+            <mat-icon matPrefix>event_available</mat-icon>
+            <input
+              matInput
+              [matDatepicker]="pickerFin"
+              [value]="toDate(evenement.datesDto.dateFinEvenement)"
+              (dateChange)="onDateFinChange($event.value)"
+              readonly
+            />
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"/>
+            <mat-datepicker #pickerFin/>
+            @if (!evenement.datesDto.dateFinEvenement && creationForm.submitted) {
+              <mat-error>La date de fin est requise.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure fin</mat-label>
+            <input
+              matInput
+              type="time"
+              [value]="toTimeString(evenement.datesDto.dateFinEvenement)"
+              (change)="onHeureFinChange($event)"
+            />
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      @if (evenement.datesDto.dateDebutEvenement && evenement.datesDto.dateFinEvenement) {
+        <div class="ev-duree-badge">
+          <mat-icon>timer</mat-icon>
+          Durée estimée :
+          <strong>{{ formatDuree(evenement.datesDto.dateDebutEvenement, evenement.datesDto.dateFinEvenement) }}</strong>
+        </div>
+      }
+    </section>
+
+    <!-- Actions -->
+    <div class="ev-creation__actions">
+      <button type="button" mat-stroked-button class="btn-cancel" routerLink="/evenements">
+        <mat-icon>close</mat-icon>
+        Annuler
+      </button>
+      <button type="submit" mat-flat-button class="btn-submit"
+              [disabled]="creationForm.invalid"
+              (click)="submit(creationForm)">
+        <mat-icon>add_circle_outline</mat-icon>
+        Créer l'événement
+      </button>
+    </div>
+
+  </form>
+</div>

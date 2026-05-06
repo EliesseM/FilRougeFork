@@ -1,0 +1,145 @@
+<div class="ev-detail">
+  @if (evenement(); as ev) {
+
+    <div class="ev-detail__header">
+      <h1>{{ ev.infoDto.titre }}</h1>
+
+      <div class="ev-detail__actions">
+        @if (!editMode()) {
+          <button mat-flat-button color="primary" (click)="enableEdit()">
+            <mat-icon>edit</mat-icon>
+            Modifier
+          </button>
+        } @else {
+          <button mat-stroked-button (click)="cancelEdit()">Annuler</button>
+          <button mat-flat-button color="primary" (click)="save()">Sauvegarder</button>
+        }
+
+        <button mat-stroked-button color="warn" (click)="annuler()">
+          <mat-icon>event_busy</mat-icon>
+          Annuler événement
+        </button>
+
+        <button mat-stroked-button color="warn" (click)="delete()">
+          <mat-icon>delete</mat-icon>
+          Supprimer
+        </button>
+      </div>
+    </div>
+
+    <div class="ev-detail__grid">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Titre</mat-label>
+        <input matInput [(ngModel)]="ev.infoDto.titre" [disabled]="!editMode()">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput [(ngModel)]="ev.infoDto.description" [disabled]="!editMode()"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Localisation</mat-label>
+        <input matInput [(ngModel)]="ev.infoDto.localisation" [disabled]="!editMode()">
+      </mat-form-field>
+
+    </div>
+
+    <div class="ev-detail__info">
+
+      <!-- DATE DEBUT -->
+      @if (!editMode()) {
+        <div class="ev-box">
+          <span>Début</span>
+          <strong>
+            {{ ev.datesDto.dateDebutEvenement | date:'dd MMM yyyy' }} -
+            {{ ev.datesDto.dateDebutEvenement | date:'HH:mm' }}
+          </strong>
+        </div>
+      } @else {
+        <div class="ev-date-picker">
+          <mat-form-field appearance="outline">
+            <mat-label>Date début</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerDebut"
+              [value]="toDate(ev.datesDto.dateDebutEvenement)"
+              (dateChange)="onDateDebutChange($event.value)"
+              readonly
+            >
+            <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDebut></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure début</mat-label>
+            <input
+              matInput
+              type="time"
+              [value]="toTimeString(ev.datesDto.dateDebutEvenement)"
+              (change)="onHeureDebutChange($event)"
+            >
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- DATE FIN -->
+      @if (!editMode()) {
+        <div class="ev-box">
+          <span>Fin</span>
+          <strong>
+            {{ ev.datesDto.dateFinEvenement | date:'dd MMM yyyy' }} -
+            {{ ev.datesDto.dateFinEvenement | date:'HH:mm' }}
+          </strong>
+        </div>
+      } @else {
+        <div class="ev-date-picker">
+          <mat-form-field appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input
+              matInput
+              [matDatepicker]="pickerFin"
+              [value]="toDate(ev.datesDto.dateFinEvenement)"
+              (dateChange)="onDateFinChange($event.value)"
+              readonly
+            >
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure fin</mat-label>
+            <input
+              matInput
+              type="time"
+              [value]="toTimeString(ev.datesDto.dateFinEvenement)"
+              (change)="onHeureFinChange($event)"
+            >
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+      }
+
+      <!-- DURÉE -->
+      <div class="ev-box">
+        <span>Durée</span>
+        <strong>
+          {{ formatDuree(
+          ev.datesDto.dateDebutEvenement,
+          ev.datesDto.dateFinEvenement
+        ) }}
+        </strong>
+      </div>
+
+      <!-- STATUT -->
+      <div class="ev-box">
+        <span>Statut</span>
+        <strong>{{ ev.statutDto.statutEvenement }}</strong>
+      </div>
+
+    </div>
+
+  }
+</div>

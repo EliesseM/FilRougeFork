@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ALTERNATIVE_JRE_PATH" value="azul-21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <envs>
+      <env name="DB_USERNAME" value="postgres" />
+      <env name="DB_PASSWORD" value="postgres" />
+    </envs>
+    <module name="projet-fil-rouge" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="fr.schoolbyhiit.projetfilrouge.Application" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

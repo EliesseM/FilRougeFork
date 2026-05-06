@@ -1,0 +1,161 @@
+<div class="ev-creation">
+
+  <a class="ev-creation__back" routerLink="/sessions">
+    <mat-icon>arrow_back</mat-icon>
+    Retour aux sessions
+  </a>
+
+  <header class="ev-creation__header">
+    <div class="ev-creation__header-icon">
+      <mat-icon>video_library</mat-icon>
+    </div>
+    <div>
+      <h1 class="ev-creation__title">Nouvelle session</h1>
+      <p class="ev-creation__sub">Crée une session pour un événement.</p>
+    </div>
+  </header>
+
+  <form class="ev-creation__form" #form="ngForm" novalidate>
+
+    <!-- INFOS -->
+    <section class="ev-section">
+      <div class="ev-section__label">
+        <mat-icon>info</mat-icon>
+        <span>Informations</span>
+      </div>
+
+      <div class="ev-section__fields">
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Titre</mat-label>
+          <mat-icon matPrefix>title</mat-icon>
+          <input matInput name="titre"
+                 [(ngModel)]="session.infos.titre"
+                 required #titre="ngModel"/>
+          @if (titre.invalid && titre.touched) {
+            <mat-error>Le titre est requis.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Description</mat-label>
+          <mat-icon matPrefix>notes</mat-icon>
+          <textarea matInput name="description"
+                    [(ngModel)]="session.infos.description"
+                    rows="4"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Lieu</mat-label>
+          <mat-icon matPrefix>meeting_room</mat-icon>
+          <input matInput name="lieu"
+                 [(ngModel)]="session.infos.lieu"
+                 required #lieu="ngModel"/>
+          @if (lieu.invalid && lieu.touched) {
+            <mat-error>Le lieu est requis.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Animateur</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput name="animateur"
+                 [(ngModel)]="session.infos.animateur"/>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field-full">
+          <mat-label>Capacité max</mat-label>
+          <mat-icon matPrefix>people</mat-icon>
+          <input matInput type="number" name="capaciteMax"
+                 [(ngModel)]="session.infos.capaciteMax"/>
+        </mat-form-field>
+
+      </div>
+    </section>
+
+    <!-- DATES -->
+    <section class="ev-section">
+      <div class="ev-section__label">
+        <mat-icon>calendar_month</mat-icon>
+        <span>Dates & horaires</span>
+      </div>
+
+      <div class="ev-section__fields ev-section__fields--row">
+
+        <!-- Début -->
+        <div class="ev-date-picker field-half">
+          <mat-form-field appearance="outline">
+            <mat-label>Date début</mat-label>
+            <input matInput
+                   [matDatepicker]="pickerDebut"
+                   [value]="toDate(session.dates.dateDebutSession)"
+                   (dateChange)="onDateDebutChange($event.value)"
+                   readonly/>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerDebut"/>
+            <mat-datepicker #pickerDebut/>
+            @if (submitted && !session.dates.dateDebutSession) {
+              <mat-error>La date de début est requise.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure début</mat-label>
+            <input matInput type="time"
+                   [value]="toTimeString(session.dates.dateDebutSession)"
+                   (change)="onHeureDebutChange($event)"/>
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Fin -->
+        <div class="ev-date-picker field-half">
+          <mat-form-field appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput
+                   [matDatepicker]="pickerFin"
+                   [value]="toDate(session.dates.dateFinSession)"
+                   (dateChange)="onDateFinChange($event.value)"
+                   readonly/>
+            <mat-datepicker-toggle matIconSuffix [for]="pickerFin"/>
+            <mat-datepicker #pickerFin/>
+            @if (submitted && !session.dates.dateFinSession) {
+              <mat-error>La date de fin est requise.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="ev-time-field">
+            <mat-label>Heure fin</mat-label>
+            <input matInput type="time"
+                   [value]="toTimeString(session.dates.dateFinSession)"
+                   (change)="onHeureFinChange($event)"/>
+            <mat-icon matSuffix>schedule</mat-icon>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      @if (session.dates.dateDebutSession && session.dates.dateFinSession) {
+        <div class="ev-duree-badge">
+          <mat-icon>timer</mat-icon>
+          Durée estimée :
+          <strong>{{ formatDuree(session.dates.dateDebutSession, session.dates.dateFinSession) }}</strong>
+        </div>
+      }
+    </section>
+
+    <!-- ACTIONS -->
+    <div class="ev-creation__actions">
+      <button type="button" mat-stroked-button class="btn-cancel" routerLink="/sessions">
+        <mat-icon>close</mat-icon>
+        Annuler
+      </button>
+      <button type="submit" mat-flat-button class="btn-submit"
+              (click)="submit(form)"
+              [disabled]="form.invalid">
+        <mat-icon>add_circle_outline</mat-icon>
+        Créer la session
+      </button>
+    </div>
+
+  </form>
+</div>

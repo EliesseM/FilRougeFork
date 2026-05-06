@@ -1,0 +1,34 @@
+meta {
+  name: updateEvenement
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{localhost}}evenements/2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "infoDto": {
+      "titre": "Cour de Karatééé",
+      "description": "Apprendre le japonais en s'amusant avec Martest le boss.",
+      "localisation": "Lyon, France"
+    },
+    "datesDto": {
+      "dateDebutEvenement": "2026-12-01T09:00:00",
+      "dateFinEvenement": "2029-12-31T18:00:00"
+    },
+    "utilisateur": {
+      "utilisateurId": "1"
+    }
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

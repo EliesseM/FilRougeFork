@@ -1,0 +1,16 @@
+meta {
+  name: annulerInscription
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{localhost}}inscriptions/annuler/9
+  body: json
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

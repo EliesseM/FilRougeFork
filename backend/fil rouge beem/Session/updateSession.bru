@@ -1,0 +1,38 @@
+meta {
+  name: updateSession
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{localhost}}sessions/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "evenement": {
+      "evenementId": 7,
+      "utilisateur": {
+        "utilisateurId": "5"
+      }
+    },
+        "dates": {
+          "dateDebutSession": "2027-12-15T01:00:00",
+          "dateFinSession": "2028-12-18T02:00:00"
+        },
+        "infos": {
+          "titre": "la soirée de Didier",
+          "description": "c'est ma soirée",
+          "lieu": "Villa Du Gouj",
+          "animateur": "Le Gouj",
+          "capaciteMax": 1000
+        }
+    }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

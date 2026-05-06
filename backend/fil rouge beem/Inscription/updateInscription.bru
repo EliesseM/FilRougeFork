@@ -1,0 +1,25 @@
+meta {
+  name: updateInscription
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{localhost}}inscriptions/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  
+   {
+    "utilisateurId": "4",
+    "sessionId": 5,
+     "statutInscription": "En_attente"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

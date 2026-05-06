@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test WebSocket - Notifications</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 24px;
+            font-size: 1.4rem;
+        }
+
+        .panel {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+
+        .panel h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 14px;
+            letter-spacing: 0.1em;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            width: 130px;
+            flex-shrink: 0;
+        }
+
+        input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #38bdf8;
+        }
+
+        .btn {
+            padding: 9px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .btn-connect {
+            background: #22c55e;
+            color: #fff;
+        }
+
+        .btn-disconnect {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-subscribe {
+            background: #38bdf8;
+            color: #0f172a;
+        }
+
+        .btn-clear {
+            background: #475569;
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            margin-left: 12px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ef4444;
+        }
+
+        .dot.connected {
+            background: #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1
+            }
+            50% {
+                opacity: 0.5
+            }
+        }
+
+        .subscriptions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+            min-height: 32px;
+        }
+
+        .tag {
+            background: #0f172a;
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+            padding: 0;
+        }
+
+        .tag button:hover {
+            color: #ef4444;
+        }
+
+        #log {
+            background: #020617;
+            border-radius: 10px;
+            padding: 16px;
+            height: 320px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.82rem;
+            border: 1px solid #1e293b;
+        }
+
+        .log-line {
+            padding: 4px 0;
+            border-bottom: 1px solid #0f172a;
+            display: flex;
+            gap: 10px;
+        }
+
+        .log-time {
+            color: #475569;
+            flex-shrink: 0;
+        }
+
+        .log-info {
+            color: #38bdf8;
+        }
+
+        .log-success {
+            color: #22c55e;
+        }
+
+        .log-error {
+            color: #ef4444;
+        }
+
+        .log-msg {
+            color: #fbbf24;
+        }
+
+        .log-warn {
+            color: #f97316;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🔔 Test WebSocket — Notifications Événements</h1>
+
+<!-- Connexion -->
+<div class="panel">
+    <h2>Connexion</h2>
+    <div class="row">
+        <label>URL WebSocket</label>
+        <label for="wsUrl"></label><input id="wsUrl" value="ws://localhost:8080/ws-notifications"/>
+        <button class="btn btn-connect" onclick="connectWS()">Connecter</button>
+        <button class="btn btn-disconnect" onclick="disconnectWS()">Déconnecter</button>
+        <span class="status"><span class="dot" id="dot"></span><span id="statusText">Déconnecté</span></span>
+    </div>
+</div>
+
+<!-- Abonnements -->
+<div class="panel">
+    <h2>Abonnements STOMP</h2>
+    <div class="row">
+        <label>Topic</label>
+        <label for="topicInput"></label><input id="topicInput" value="/topic/notification/evenement-1"
+                                               placeholder="/topic/notification/evenement-1"/>
+        <button class="btn btn-subscribe" onclick="subscribe()">S'abonner</button>
+    </div>
+    <div style="margin-top:4px; font-size:0.8rem; color:#64748b;">
+        Raccourcis :
+        <span style="cursor:pointer;color:#38bdf8;" onclick="setTopic('evenement')">événement</span> |
+        <span style="cursor:pointer;color:#38bdf8;" onclick="setTopic('session')">session</span>
+    </div>
+    <div class="subscriptions" id="subscriptions"></div>
+</div>
+
+<!-- Logs -->
+<div class="panel">
+    <div class="log-header">
+        <h2 style="margin:0">📨 Messages reçus</h2>
+        <button class="btn btn-clear" onclick="clearLog()">Vider</button>
+    </div>
+    <div id="log">
+        <div class="log-line"><span class="log-time">--:--:--</span><span
+                class="log-info">En attente de connexion...</span></div>
+    </div>
+</div>
+
+<script>
+    let client = null;
+    const subs = {};
+
+    function now() {
+        return new Date().toLocaleTimeString('fr-FR');
+    }
+
+    function log(msg, type = 'info') {
+        const el = document.getElementById('log');
+        const line = document.createElement('div');
+        line.className = 'log-line';
+        line.innerHTML = `<span class="log-time">${now()}</span><span class="log-${type}">${msg}</span>`;
+        el.appendChild(line);
+        el.scrollTop = el.scrollHeight;
+    }
+
+    function clearLog() {
+        document.getElementById('log').innerHTML = '';
+    }
+
+    function setStatus(connected) {
+        document.getElementById('dot').className = 'dot' + (connected ? ' connected' : '');
+        document.getElementById('statusText').textContent = connected ? 'Connecté' : 'Déconnecté';
+    }
+
+    function setTopic(type) {
+        const id = prompt(`ID de ${type === 'evenement' ? "l'événement" : 'la session'} ?`);
+        if (id) document.getElementById('topicInput').value = `/topic/notification/${type}-${id}`;
+    }
+
+    function connectWS() {
+        const url = document.getElementById('wsUrl').value.trim();
+        if (!url) return log('URL manquante', 'error');
+        if (client && client.connected) return log('Déjà connecté', 'warn');
+
+        log(`Connexion à ${url}...`, 'info');
+
+        client = new StompJs.Client({
+            brokerURL: url,
+            reconnectDelay: 0,
+            onConnect: () => {
+                setStatus(true);
+                log('✅ Connecté avec succès !', 'success');
+            },
+            onDisconnect: () => {
+                setStatus(false);
+                log('Déconnecté', 'warn');
+            },
+            onStompError: (frame) => {
+                log('Erreur STOMP : ' + frame.headers['message'], 'error');
+            },
+            onWebSocketError: (e) => {
+                log('Erreur WebSocket — vérifiez que le serveur tourne et que CORS est ok', 'error');
+                setStatus(false);
+            }
+        });
+
+        client.activate();
+    }
+
+    function disconnectWS() {
+        if (client) {
+            client.deactivate();
+            Object.keys(subs).forEach(t => removeSub(t, false));
+            document.getElementById('subscriptions').innerHTML = '';
+            setStatus(false);
+            log('Déconnexion manuelle', 'warn');
+        }
+    }
+
+    function subscribe() {
+        const topic = document.getElementById('topicInput').value.trim();
+        if (!topic) return log('Topic vide', 'error');
+        if (!client || !client.connected) return log('Non connecté', 'error');
+        if (subs[topic]) return log(`Déjà abonné à ${topic}`, 'warn');
+
+        subs[topic] = client.subscribe(topic, (message) => {
+            log(`📩 [${topic}] → ${message.body}`, 'msg');
+        });
+
+        log(`Abonné à ${topic}`, 'success');
+        addTag(topic);
+    }
+
+    function addTag(topic) {
+        const container = document.getElementById('subscriptions');
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.id = 'tag-' + btoa(topic);
+        tag.innerHTML = `${topic} <button onclick="removeSub('${topic}', true)">×</button>`;
+        container.appendChild(tag);
+    }
+
+    function removeSub(topic, unsub = true) {
+        if (subs[topic]) {
+            if (unsub) {
+                subs[topic].unsubscribe();
+                log(`Désabonné de ${topic}`, 'warn');
+            }
+            delete subs[topic];
+        }
+        const tag = document.getElementById('tag-' + btoa(topic));
+        if (tag) tag.remove();
+    }
+</script>
+</body>
+</html>

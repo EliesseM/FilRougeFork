@@ -1,0 +1,483 @@
+// ═══════════════════════════════════════════════════════
+// TOKENS
+// ═══════════════════════════════════════════════════════
+$bg:           #080c14;
+$surface:      #0f1621;
+$surface-2:    #161f30;
+$surface-3:    #1d2840;
+$border:       rgba(255, 255, 255, 0.06);
+$border-2:     rgba(255, 255, 255, 0.11);
+$border-focus: rgba(99, 160, 255, 0.45);
+
+$accent:       #63a0ff;
+$accent-2:     #a78bfa;
+$accent-dim:   rgba(99, 160, 255, 0.12);
+$accent-glow:  rgba(99, 160, 255, 0.22);
+
+$green:        #4ade80;
+$green-dim:    rgba(74, 222, 128, 0.12);
+$amber:        #fbbf24;
+$amber-dim:    rgba(251, 191, 36, 0.12);
+$red:          #f87171;
+$red-dim:      rgba(248, 113, 113, 0.12);
+
+$text:         #dde4f0;
+$text-soft:    #6b7fa0;
+$text-muted:   #3a4a62;
+
+$font-head:    'Fraunces', serif;
+$font-body:    'DM Sans', sans-serif;
+$ease:         cubic-bezier(0.4, 0, 0.2, 1);
+$radius:       18px;
+$radius-sm:    11px;
+$radius-chip:  20px;
+
+
+// ═══════════════════════════════════════════════════════
+// ANIMATIONS
+// ═══════════════════════════════════════════════════════
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// HOST
+// ═══════════════════════════════════════════════════════
+:host {
+  display: block;
+  font-family: $font-body;
+  background: $bg;
+  min-height: 100vh;
+  color: $text;
+}
+
+
+// ═══════════════════════════════════════════════════════
+// PAGE
+// ═══════════════════════════════════════════════════════
+.ev-detail {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+  animation: page-in 0.4s $ease both;
+
+  @media (max-width: 700px) {
+    padding: 24px 16px 60px;
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// HEADER
+// ═══════════════════════════════════════════════════════
+.ev-detail__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid $border;
+  flex-wrap: wrap;
+
+  @media (max-width: 700px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  h1 {
+    font-family: $font-head;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+    background: linear-gradient(135deg, $text 40%, $accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    @media (max-width: 700px) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════════════
+.ev-detail__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+
+  @media (max-width: 700px) {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  // Bouton primaire (Modifier / Sauvegarder)
+  button[mat-flat-button][color="primary"] {
+    background: linear-gradient(135deg, $accent, $accent-2) !important;
+    color: #08101f !important;
+    border-radius: $radius-sm !important;
+    font-family: $font-body !important;
+    font-weight: 700 !important;
+    font-size: 0.83rem !important;
+    height: 38px !important;
+    box-shadow: 0 4px 16px $accent-glow !important;
+    transition: transform 0.18s $ease, box-shadow 0.18s $ease !important;
+
+    &:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 24px $accent-glow !important;
+    }
+
+    mat-icon { font-size: 17px; width: 17px; height: 17px; margin-right: 5px; }
+  }
+
+  // Bouton neutre (Annuler édition)
+  button[mat-stroked-button]:not([color]) {
+    border-color: $border-2 !important;
+    color: $text-soft !important;
+    border-radius: $radius-sm !important;
+    font-family: $font-body !important;
+    font-size: 0.83rem !important;
+    height: 38px !important;
+    transition: border-color 0.18s $ease, color 0.18s $ease, background 0.18s $ease !important;
+
+    &:hover {
+      border-color: $border-focus !important;
+      color: $text !important;
+      background: $accent-dim !important;
+    }
+  }
+
+  // Boutons danger (Annuler événement / Supprimer)
+  button[mat-stroked-button][color="warn"] {
+    border-color: rgba($red, 0.3) !important;
+    color: $red !important;
+    border-radius: $radius-sm !important;
+    font-family: $font-body !important;
+    font-size: 0.83rem !important;
+    height: 38px !important;
+    transition: border-color 0.18s $ease, background 0.18s $ease !important;
+
+    &:hover {
+      background: $red-dim !important;
+      border-color: rgba($red, 0.55) !important;
+    }
+
+    mat-icon { font-size: 17px; width: 17px; height: 17px; margin-right: 5px; }
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// MIXIN — champ Material dark
+// ═══════════════════════════════════════════════════════
+@mixin mat-field-dark {
+  width: 100%;
+
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: $border-2 !important;
+    transition: border-color 0.2s $ease !important;
+  }
+
+  &:focus-within {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $border-focus !important;
+    }
+  }
+
+  .mdc-floating-label {
+    color: $text-soft !important;
+    font-family: $font-body !important;
+    font-size: 0.85rem !important;
+  }
+
+  input.mat-mdc-input-element,
+  textarea.mat-mdc-input-element {
+    color: $text !important;
+    font-family: $font-body !important;
+    font-size: 0.92rem !important;
+    caret-color: $accent;
+    background: transparent;
+  }
+
+  textarea.mat-mdc-input-element {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background: $surface !important;
+    border-radius: $radius-sm !important;
+  }
+
+  // Icône toggle datepicker
+  .mat-mdc-icon-button {
+    color: $text-soft !important;
+    transition: color 0.18s $ease !important;
+
+    &:hover { color: $accent !important; }
+  }
+
+  // Input time natif
+  input[type="time"] {
+    color-scheme: dark;
+    color: $text !important;
+  }
+
+  // Désactivé → lecture seule
+  &.mat-form-field-disabled {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: $border !important;
+    }
+
+    .mat-mdc-text-field-wrapper {
+      background: rgba($surface, 0.5) !important;
+    }
+
+    input.mat-mdc-input-element,
+    textarea.mat-mdc-input-element {
+      color: $text-soft !important;
+    }
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// GRILLE FORMULAIRE (titre / description / localisation)
+// ═══════════════════════════════════════════════════════
+.ev-detail__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 32px;
+
+  mat-form-field { @include mat-field-dark; }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// SECTION INFO (boxes + pickers)
+// ═══════════════════════════════════════════════════════
+.ev-detail__info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  align-items: start;
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+}
+
+
+// ── Picker date + heure ──────────────────────────────
+.ev-date-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    gap: 1rem;
+
+    mat-form-field { width: 100% !important; }
+  }
+
+  mat-form-field {
+    @include mat-field-dark;
+
+  }
+
+  .ev-time-field {
+    width: 10rem;
+    flex-shrink: 0;
+  }
+}
+
+
+// ── Boîtes lecture seule ─────────────────────────────
+.ev-box {
+  background: $surface;
+  border: 1px solid $border;
+  border-left: 3px solid transparent;
+  border-radius: $radius-sm;
+  padding: 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color 0.2s $ease, transform 0.18s $ease, box-shadow 0.18s $ease;
+  width: 9rem;
+
+  // Ligne accent top au survol
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 2px;
+    background: linear-gradient(90deg, $accent, $accent-2);
+    opacity: 0;
+    transition: opacity 0.2s $ease;
+  }
+
+  &:hover {
+    border-color: $border-2;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+
+    &::before { opacity: 1; }
+  }
+
+  span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $text-muted;
+  }
+
+  strong {
+    font-family: $font-body;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text;
+    line-height: 1.4;
+  }
+
+  // Variantes couleur par position
+  &:nth-child(1) { border-left-color: $accent;   strong { color: $accent; } }
+  &:nth-child(2) { border-left-color: $accent-2; strong { color: $accent-2; } }
+  &:nth-child(3) { border-left-color: $amber;    strong { color: $amber; } }
+  &:nth-child(4) { border-left-color: $green;    strong { color: $green; } }
+}
+
+// Chip statut
+.ev-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: $radius-chip;
+  font-size: 0.78rem;
+  font-weight: 700;
+
+  &--confirme { background: $green-dim; color: $green; }
+  &--attente  { background: $amber-dim; color: $amber; }
+  &--annule   { background: $red-dim;   color: $red; }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// SKELETON
+// ═══════════════════════════════════════════════════════
+.ev-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 48px 32px;
+
+  &__bar {
+    height: 14px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, $surface 25%, $surface-2 50%, $surface 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+
+    &--title { height: 28px; width: 55%; border-radius: 8px; }
+    &--short { width: 35%; }
+    &--full  { width: 100%; }
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// DATEPICKER OVERLAY (dark theme global)
+// ═══════════════════════════════════════════════════════
+::ng-deep .mat-datepicker-content {
+  background: $surface-2 !important;
+  border: 1px solid $border-2 !important;
+  border-radius: $radius !important;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+
+  // En-tête mois/année
+  .mat-calendar-header {
+    background: $surface-3 !important;
+    border-radius: $radius $radius 0 0 !important;
+    padding: 8px !important;
+  }
+
+  .mat-calendar-period-button,
+  .mat-calendar-next-button,
+  .mat-calendar-previous-button {
+    color: $text-soft !important;
+    transition: color 0.15s $ease !important;
+
+    &:hover { color: $accent !important; }
+  }
+
+  .mat-calendar-arrow { fill: $text-soft !important; }
+
+  // Jours
+  .mat-calendar-table-header th,
+  .mat-calendar-body-label {
+    color: $text-muted !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .mat-calendar-body-cell-content {
+    color: $text !important;
+    border-radius: $radius-sm !important;
+    transition: background 0.15s $ease !important;
+  }
+
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+    background: $accent-dim !important;
+    color: $accent !important;
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    .mat-calendar-body-cell-content {
+      border: 1px solid $accent !important;
+      color: $accent !important;
+    }
+  }
+
+  .mat-calendar-body-selected {
+    background: $accent !important;
+    color: #08101f !important;
+    font-weight: 700 !important;
+  }
+
+  // Cellules désactivées
+  .mat-calendar-body-disabled .mat-calendar-body-cell-content {
+    color: $text-muted !important;
+  }
+}

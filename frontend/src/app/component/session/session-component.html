@@ -1,0 +1,208 @@
+<div class="se-page">
+
+  <nav class="se-breadcrumb">
+    <a routerLink="/" class="se-breadcrumb__link">
+      <mat-icon>home</mat-icon><span>Accueil</span>
+    </a>
+    <mat-icon class="se-breadcrumb__sep">chevron_right</mat-icon>
+    <a routerLink="/evenements" class="se-breadcrumb__link">
+      <mat-icon>event</mat-icon><span>Événements</span>
+    </a>
+    <mat-icon class="se-breadcrumb__sep">chevron_right</mat-icon>
+    <span class="se-breadcrumb__current">Sessions</span>
+  </nav>
+
+  <header class="se-header">
+    <div class="se-header__text">
+      <p class="se-header__eyebrow">
+        <mat-icon>video_library</mat-icon>
+        Gestion des sessions
+      </p>
+      <h1 class="se-header__title">Sessions</h1>
+      <p class="se-header__sub">{{ filteredSessions().length }} session(s) trouvée(s)</p>
+    </div>
+    <button mat-flat-button class="se-header__cta" routerLink="/sessions/new">
+      <mat-icon>add</mat-icon>
+      Nouvelle Session
+    </button>
+  </header>
+
+  <div class="se-stats">
+    <div class="se-stat se-stat--total">
+      <mat-icon>calendar_month</mat-icon>
+      <div>
+        <span class="se-stat__value">{{ stats().total }}</span>
+        <span class="se-stat__label">Total</span>
+      </div>
+    </div>
+    <div class="se-stat se-stat--confirme">
+      <mat-icon>check_circle</mat-icon>
+      <div>
+        <span class="se-stat__value">{{ stats().confirmes }}</span>
+        <span class="se-stat__label">Confirmées</span>
+      </div>
+    </div>
+    <div class="se-stat se-stat--attente">
+      <mat-icon>schedule</mat-icon>
+      <div>
+        <span class="se-stat__value">{{ stats().attente }}</span>
+        <span class="se-stat__label">En attente</span>
+      </div>
+    </div>
+    <div class="se-stat se-stat--annule">
+      <mat-icon>cancel</mat-icon>
+      <div>
+        <span class="se-stat__value">{{ stats().annules }}</span>
+        <span class="se-stat__label">Annulées</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="se-toolbar">
+    <mat-form-field appearance="outline" class="se-toolbar__search">
+      <mat-label>Rechercher une session</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [value]="searchQuery()"
+        (input)="onSearch(getInputValue($event))"
+        placeholder="Titre, lieu, animateur..."
+      />
+      @if (searchQuery()) {
+        <button matSuffix mat-icon-button aria-label="Effacer" (click)="onSearch('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="se-toolbar__filter">
+      <mat-label>Statut</mat-label>
+      <mat-icon matPrefix>filter_list</mat-icon>
+      <mat-select [value]="filterStatut()" (selectionChange)="onFilterChange($event.value)">
+        @for (s of statuts; track s) {
+          <mat-option [value]="s">
+            {{ s === 'Tous' ? 'Tous les statuts' : getStatutConfig(s).label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="se-toolbar__views">
+      <button mat-icon-button [class.is-active]="viewMode() === 'grid'"
+              matTooltip="Vue grille" (click)="viewMode.set('grid')">
+        <mat-icon>grid_view</mat-icon>
+      </button>
+      <button mat-icon-button [class.is-active]="viewMode() === 'list'"
+              matTooltip="Vue liste" (click)="viewMode.set('list')">
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="se-empty">
+      <mat-spinner diameter="48"/>
+      <p class="se-empty__sub">Chargement des sessions…</p>
+    </div>
+  }
+
+  @if (!loading() && filteredSessions().length === 0) {
+    <div class="se-empty">
+      <mat-icon class="se-empty__icon">event_busy</mat-icon>
+      <p class="se-empty__title">Aucune session trouvée</p>
+      <p class="se-empty__sub">Essayez un autre filtre ou créez une nouvelle session.</p>
+      <button mat-flat-button routerLink="/sessions/new">
+        <mat-icon>add</mat-icon>
+        Créer une session
+      </button>
+    </div>
+  }
+
+  @if (!loading() && filteredSessions().length > 0) {
+    <div class="se-grid" [class.se-grid--list]="viewMode() === 'list'">
+
+      @for (s of filteredSessions(); track trackById($index, s)) {
+        <mat-card class="se-card" [class.se-card--list]="viewMode() === 'list'"
+                  (click)="onEdit(s, $event)">
+
+          <div class="se-card__top">
+            <span class="se-card__statut"
+                  [ngClass]="getStatutConfig(s.statut.statutSession).cssClass">
+              <mat-icon>{{ getStatutConfig(s.statut.statutSession).icon }}</mat-icon>
+              {{ getStatutConfig(s.statut.statutSession).label }}
+            </span>
+
+            <button mat-icon-button class="se-card__menu-btn"
+                    [matMenuTriggerFor]="cardMenu"
+                    (click)="$event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #cardMenu="matMenu">
+              <button mat-menu-item (click)="onEdit(s, $event)">
+                <mat-icon>visibility</mat-icon><span>Voir</span>
+              </button>
+              @if (s.statut.statutSession !== StatutSession.Annuler) {
+                <button mat-menu-item (click)="onAnnuler(s, $event)">
+                  <mat-icon>event_busy</mat-icon><span>Annuler</span>
+                </button>
+              }
+              <mat-divider/>
+              <button mat-menu-item class="menu-item--danger" (click)="onDelete(s, $event)">
+                <mat-icon>delete</mat-icon><span>Supprimer</span>
+              </button>
+            </mat-menu>
+          </div>
+
+          <mat-card-content class="se-card__body">
+            <h3 class="se-card__titre">{{ s.infos.titre }}</h3>
+            <p class="se-card__desc">{{ s.infos.description }}</p>
+
+            <mat-divider class="se-card__divider"/>
+
+            <div class="se-card__meta">
+              <div class="se-card__meta-item">
+                <mat-icon>meeting_room</mat-icon>
+                <span>{{ s.infos.lieu }}</span>
+              </div>
+              <div class="se-card__meta-item">
+                <mat-icon>person</mat-icon>
+                <span>{{ s.infos.animateur }}</span>
+              </div>
+              <div class="se-card__meta-item">
+                <mat-icon>timer</mat-icon>
+                <span>{{ formatDuree(s.dates.dureeSession) }}</span>
+              </div>
+              <div class="se-card__meta-item">
+                <mat-icon>people</mat-icon>
+                <span>{{ s.infos.capaciteMax }} places</span>
+              </div>
+              <div class="se-card__meta-item">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ s.dates.dateDebutSession | date:'dd/MM/yy' }}</span>
+              </div>
+              <div class="se-card__meta-item">
+                <mat-icon>event_available</mat-icon>
+                <span>{{ s.dates.dateFinSession | date:'dd/MM/yy' }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="se-card__actions">
+            <span class="se-card__id">#{{ s.sessionId }}</span>
+            <span class="se-card__created">
+              {{ s.dates.dateCreationSession | date:'dd/MM/yyyy' }}
+            </span>
+            <button mat-stroked-button (click)="onEdit(s, $event)">
+              <mat-icon>visibility</mat-icon>Voir
+            </button>
+            <button mat-stroked-button color="warn" (click)="onDelete(s, $event)">
+              <mat-icon>delete</mat-icon>Supprimer
+            </button>
+          </mat-card-actions>
+
+        </mat-card>
+      }
+    </div>
+  }
+
+</div>

@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: ${DB_JDBC_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:validate}
+    show-sql: ${JPA_DEBUG_SQL:false}
+  Jackson:
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+          jwk-set-uri: "https://www.googleapis.com/oauth2/v3/certs"
+
+  docker:
+    compose:
+      enabled: false
+      lifecycle-management: start_only
+
+
+
+app:
+  jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}
+  default-admin-email: ${DEFAULT_ADMIN_EMAIL:admin@school-by-hiit.fr}
+
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    org.springframework.messaging: DEBUG
+    org.springframework.web.socket: DEBUG

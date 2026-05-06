@@ -1,0 +1,64 @@
+<div class="page-admin">
+
+  <h1 class="page-admin__title">Administration</h1>
+
+  <!-- Stats -->
+  <div class="page-admin__stats">
+    <div class="ev-stat ev-stat--demandes">
+      <span class="ev-stat__icon">◈</span>
+      <div>
+        <div class="ev-stat__value">{{ counts.demandes }}</div>
+        <div class="ev-stat__label">Demandes de rôle en attente</div>
+      </div>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="page-admin__loader">Chargement...</div>
+  }
+
+  <!-- ── Demandes de rôle ── -->
+  @if (!loading && demandesPage) {
+    <div class="page-admin__list">
+      @if (demandesPage.content.length === 0) {
+        <div class="empty">Aucune demande en attente</div>
+      }
+      @for (d of demandesPage.content; track d.demandeDeRoleId) {
+        <div class="item-card">
+          <div class="item-card__icon item-card__icon--demande">◈</div>
+          <div class="item-card__info">
+            <p class="item-card__title">
+              {{ d.utilisateur.prenom }} {{ d.utilisateur.nom }}
+              <span class="item-card__tag">{{ d.statutDemandeRole }}</span>
+            </p>
+            <p class="item-card__meta">
+              {{ d.utilisateur.email }} · Demande #{{ d.demandeDeRoleId }}
+            </p>
+          </div>
+          <div class="item-card__actions">
+            <button class="btn btn--approve" (click)="approuverDemande(d.demandeDeRoleId)">Approuver</button>
+            <button class="btn btn--reject" (click)="refuserDemande(d.demandeDeRoleId)">Refuser</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (demandesPage.totalPages > 1) {
+      <div class="page-admin__pagination">
+        <button class="page-btn" [disabled]="demandesPage.first"
+                (click)="loadDemandes(demandesPage.number - 1)">‹
+        </button>
+        @for (p of getPagesArray(demandesPage.totalPages); track p) {
+          <button class="page-btn"
+                  [class.page-btn--active]="p === demandesPage.number"
+                  (click)="loadDemandes(p)">{{ p + 1 }}
+          </button>
+        }
+        <button class="page-btn" [disabled]="demandesPage.last"
+                (click)="loadDemandes(demandesPage.number + 1)">›
+        </button>
+      </div>
+    }
+  }
+
+</div>

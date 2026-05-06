@@ -1,0 +1,16 @@
+meta {
+  name: sessionById
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{localhost}}sessions/5
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

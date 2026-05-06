@@ -1,0 +1,20 @@
+meta {
+  name: getAllsession
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{localhost}}sessions?utilisateurId=5
+  body: none
+  auth: inherit
+}
+
+params:query {
+  utilisateurId: 5
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

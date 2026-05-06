@@ -1,0 +1,27 @@
+meta {
+  name: getAllEvenement
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{localhost}}evenements
+  body: none
+  auth: none
+}
+
+params:query {
+  ~titre: 
+  ~utilisateurid: 
+  ~dureeEvenement: 
+  ~statutEvenement: 
+  ~localisation: 
+  ~dateCreationEvenement: 
+  ~dateDebutEvenement: 
+  ~dateFinEvenement: 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,22 @@
+meta {
+  name: getAllInscription
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{localhost}}inscriptions
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~sessionId: 1
+  ~utilisateurId: 3
+  ~statutInscription: Confirmer
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

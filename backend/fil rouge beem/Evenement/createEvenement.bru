@@ -1,0 +1,34 @@
+meta {
+  name: createEvenement
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{localhost}}evenements
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "infoDto": {
+      "titre": "Cour de Japonaisiexsfg",
+      "description": "Apprendre le japonais en s'amusant avec Martest le boss.",
+      "localisation": "Lyon, France"
+    },
+    "datesDto": {
+      "dateDebutEvenement": "2026-12-01T09:00:00",
+      "dateFinEvenement": "2026-12-31T18:00:00"
+    },
+    "utilisateur": {
+      "utilisateurId": "1"
+    }
+  }
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

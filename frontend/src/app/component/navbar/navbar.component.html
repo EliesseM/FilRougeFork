@@ -1,0 +1,105 @@
+<header class="navbar">
+
+  <!-- Logo / Brand -->
+  <a class="navbar__brand" routerLink="/">
+    <div class="navbar__brand-icon">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="10" fill="currentColor"/>
+        <path d="M8 22L14 10L20 18L23 14L26 22H8Z" fill="white" opacity="0.9"/>
+      </svg>
+    </div>
+    <span class="navbar__brand-name">FilRouge<strong>Beem</strong></span>
+  </a>
+
+  <!-- Nav links (centre) -->
+  <nav class="navbar__links">
+    <a routerLink="/evenements" routerLinkActive="active" class="navbar__link">
+      <mat-icon>event</mat-icon>
+      Événements
+    </a>
+    <a routerLink="/sessions" routerLinkActive="active" class="navbar__link">
+      <mat-icon>video_library</mat-icon>
+      Sessions
+    </a>
+
+    @if (isAdmin()) {
+      <a routerLink="/demande-role" routerLinkActive="active" class="navbar__link navbar__link--badge">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Administrateur
+        @if (pendingTotal > 0) {
+          <span class="navbar__badge">{{ pendingTotal }}</span>
+        }
+      </a>
+    }
+  </nav>
+
+  <!-- Actions droite -->
+  <div class="navbar__actions">
+
+    <!-- Cloche notifications -->
+    <app-notification-bell></app-notification-bell>
+
+    <!-- Avatar bouton -->
+    <button
+      class="navbar__avatar"
+      aria-label="Mon profil"
+      [matMenuTriggerFor]="profileMenu"
+    >
+      @if (photoUrl()) {
+        <img [src]="photoUrl()" alt="avatar"
+             class="navbar__avatar-img"
+             referrerpolicy="no-referrer"/>
+      } @else {
+        <mat-icon class="navbar__avatar-icon">person</mat-icon>
+      }
+      <span class="navbar__avatar-dot" [class.navbar__avatar-dot--on]="isLoggedIn()"></span>
+    </button>
+
+    <!-- Dropdown profile -->
+    <mat-menu #profileMenu="matMenu" class="navbar__profile-menu" xPosition="before">
+
+      @if (isLoggedIn()) {
+        <div class="npm__header" (click)="$event.stopPropagation()">
+          <div class="npm__avatar">
+            @if (photoUrl()) {
+              <img [src]="photoUrl()" alt="avatar"/>
+            } @else {
+              <mat-icon>person</mat-icon>
+            }
+          </div>
+          <div class="npm__info">
+            <span class="npm__name">{{ displayName() }}</span>
+            <span class="npm__email">{{ email() }}</span>
+          </div>
+        </div>
+        <div class="npm__divider"></div>
+      }
+
+      <button mat-menu-item class="npm__item" routerLink="/profil">
+        <mat-icon>manage_accounts</mat-icon>
+        <span>Mon profil</span>
+      </button>
+
+      <button mat-menu-item class="npm__item" routerLink="/parametres">
+        <mat-icon>settings</mat-icon>
+        <span>Paramètres</span>
+      </button>
+
+      <div class="npm__divider"></div>
+
+      @if (isLoggedIn()) {
+        <button mat-menu-item class="npm__item npm__item--danger" (click)="signOut()">
+          <mat-icon>logout</mat-icon>
+          <span>Déconnexion</span>
+        </button>
+      } @else {
+        <button mat-menu-item class="npm__item npm__item--accent" (click)="signIn()">
+          <mat-icon>login</mat-icon>
+          <span>Connexion</span>
+        </button>
+      }
+
+    </mat-menu>
+  </div>
+
+</header>

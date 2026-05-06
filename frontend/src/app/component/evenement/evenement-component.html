@@ -1,0 +1,181 @@
+<div class="ev-page">
+
+  <header class="ev-header">
+    <div class="ev-header__left">
+      <div class="ev-header__eyebrow">
+        <mat-icon>calendar_month</mat-icon>
+        <span>Gestion des événements</span>
+      </div>
+      <h1 class="ev-header__title">Événements</h1>
+      <p class="ev-header__sub">
+        {{ filteredEvenements().length }} événement{{ filteredEvenements().length > 1 ? 's' : '' }} trouvé{{ filteredEvenements().length > 1 ? 's' : '' }}
+      </p>
+    </div>
+
+    <button mat-flat-button color="primary" routerLink="/evenements/new">
+      <mat-icon>add</mat-icon>
+      Nouvel événement
+    </button>
+  </header>
+
+  <section class="ev-stats" aria-label="Statistiques">
+    <div class="ev-stat ev-stat--total">
+      <span class="ev-stat__value">{{ stats().total }}</span>
+      <span class="ev-stat__label">Total</span>
+    </div>
+    <div class="ev-stat ev-stat--confirme">
+      <mat-icon>check_circle</mat-icon>
+      <span class="ev-stat__value">{{ stats().confirmes }}</span>
+      <span class="ev-stat__label">Confirmés</span>
+    </div>
+    <div class="ev-stat ev-stat--attente">
+      <mat-icon>schedule</mat-icon>
+      <span class="ev-stat__value">{{ stats().attente }}</span>
+      <span class="ev-stat__label">En attente</span>
+    </div>
+    <div class="ev-stat ev-stat--annule">
+      <mat-icon>cancel</mat-icon>
+      <span class="ev-stat__value">{{ stats().annules }}</span>
+      <span class="ev-stat__label">Annulés</span>
+    </div>
+  </section>
+
+  <div class="ev-toolbar">
+
+    <mat-form-field appearance="outline" class="ev-toolbar__search">
+      <mat-label>Rechercher un événement</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [value]="searchQuery()"
+        (input)="onSearch(getInputValue($event))"
+        placeholder="Titre, lieu, description..."
+      />
+      @if (searchQuery()) {
+        <button matSuffix mat-icon-button aria-label="Effacer" (click)="onSearch('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ev-toolbar__filter">
+      <mat-label>Statut</mat-label>
+      <mat-icon matPrefix>filter_list</mat-icon>
+      <mat-select [value]="filterStatut()" (selectionChange)="onFilterChange($event.value)">
+        @for (s of statuts; track s) {
+          <mat-option [value]="s">
+            {{ s === 'Tous' ? 'Tous les statuts' : getStatutConfig(s).label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="ev-toolbar__views">
+      <button mat-icon-button [class.is-active]="viewMode() === 'grid'"
+              (click)="viewMode.set('grid')" matTooltip="Vue grille">
+        <mat-icon>grid_view</mat-icon>
+      </button>
+      <button mat-icon-button [class.is-active]="viewMode() === 'list'"
+              (click)="viewMode.set('list')" matTooltip="Vue liste">
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  @if (filteredEvenements().length > 0) {
+    <div class="ev-grid" [class.ev-grid--list]="viewMode() === 'list'">
+
+      @for (ev of filteredEvenements(); track trackById($index, ev)) {
+        <mat-card class="ev-card" [class.ev-card--list]="viewMode() === 'list'">
+
+          <div class="ev-card__top">
+            <span class="ev-card__statut"
+                  [ngClass]="getStatutConfig(ev.statutDto.statutEvenement).cssClass">
+              <mat-icon>{{ getStatutConfig(ev.statutDto.statutEvenement).icon }}</mat-icon>
+              {{ getStatutConfig(ev.statutDto.statutEvenement).label }}
+            </span>
+
+            <button mat-icon-button class="ev-card__menu-btn"
+                    [matMenuTriggerFor]="menu"
+                    (click)="$event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item (click)="onEdit(ev, $event)">
+                <mat-icon>edit</mat-icon>
+                <span>Modifier</span>
+              </button>
+              @if (ev.statutDto.statutEvenement !== StatutEvenement.Annuler) {
+                <button mat-menu-item (click)="onAnnuler(ev, $event)">
+                  <mat-icon>event_busy</mat-icon>
+                  <span>Annuler</span>
+                </button>
+              }
+              <mat-divider/>
+              <button mat-menu-item class="menu-item--danger" (click)="onDelete(ev, $event)">
+                <mat-icon>delete</mat-icon>
+                <span>Supprimer</span>
+              </button>
+            </mat-menu>
+          </div>
+
+          <mat-card-content class="ev-card__body">
+            <h2 class="ev-card__titre" [matTooltip]="ev.infoDto.titre">
+              {{ ev.infoDto.titre }}
+            </h2>
+            <p class="ev-card__desc">{{ ev.infoDto.description }}</p>
+            <mat-divider class="ev-card__divider"/>
+            <div class="ev-card__meta">
+              <div class="ev-card__meta-item">
+                <mat-icon>place</mat-icon>
+                <span>{{ ev.infoDto.localisation }}</span>
+              </div>
+              <div class="ev-card__meta-item">
+                <mat-icon>event</mat-icon>
+                <span>{{ ev.datesDto.dateDebutEvenement | date:'dd MMM yyyy' }}</span>
+              </div>
+              <div class="ev-card__meta-item">
+                <mat-icon>schedule</mat-icon>
+                <span>
+                  {{ ev.datesDto.dateDebutEvenement | date:'HH:mm' }}
+                  -
+                  {{ ev.datesDto.dateFinEvenement | date:'HH:mm' }}
+                </span>
+              </div>
+              <div class="ev-card__meta-item">
+                <mat-icon>timer</mat-icon>
+                <span>Durée : {{ formatDuree(ev.datesDto.dureeEvenement || 0) }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="ev-card__actions" align="end">
+            <span class="ev-card__id">#{{ ev.evenementId }}</span>
+            <span class="ev-card__created">
+              Créé le {{ ev.datesDto.dateCreationEvenement | date:'dd/MM/yyyy' }}
+            </span>
+            <button mat-stroked-button color="primary" (click)="onEdit(ev, $event)">
+              <mat-icon>open_in_new</mat-icon>
+              Détail
+            </button>
+          </mat-card-actions>
+
+        </mat-card>
+      }
+    </div>
+
+  } @else {
+    <div class="ev-empty">
+      <mat-icon class="ev-empty__icon">event_busy</mat-icon>
+      <h3 class="ev-empty__title">Aucun événement trouvé</h3>
+      <p class="ev-empty__sub">Modifiez vos filtres ou créez un nouvel événement.</p>
+      <button mat-flat-button color="primary" (click)="onSearch(''); onFilterChange('Tous')">
+        <mat-icon>refresh</mat-icon>
+        Réinitialiser les filtres
+      </button>
+    </div>
+  }
+
+</div>

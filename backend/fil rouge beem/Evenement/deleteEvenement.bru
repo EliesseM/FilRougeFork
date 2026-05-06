@@ -1,0 +1,20 @@
+meta {
+  name: deleteEvenement
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{localhost}}/evenements
+  body: none
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

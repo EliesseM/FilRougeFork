@@ -1,0 +1,61 @@
+name: build & test
+
+on:
+  push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      checks: write
+      contents: write
+      packages: write
+
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+
+      - uses: actions/checkout@v6
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: 'zulu'
+          cache: 'maven'
+          server-id: github
+          server-username: 'MAVEN_USER'
+          server-password: 'MAVEN_PASSWORD'
+
+      - name: Maven build & test
+        run: |
+          mvn verify -Pcoverage,openapi -f ${{ github.workspace }}/backend/pom.xml
+        env:
+          MAVEN_USER: ${{ github.actor }}
+          MAVEN_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check OpenAPI spec regeneration
+        run: |-
+          git diff --quiet -- backend/doc/openapi/spec.yml || (echo "OpenAPI spec changed after regeneration. Failing the job." && exit 1)
+
+      - name: Publish Test Report
+        uses: scacap/action-surefire-report@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        if: always()

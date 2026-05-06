@@ -1,0 +1,26 @@
+<div class="dashboard">
+  @if (authService.isLoggedIn()) {
+    <div>
+      <h1>Dashboard - Bienvenue {{ profile()?.given_name || profile()?.name }}!</h1>
+
+      @if (authService.utilisateur()) {
+        <div>
+          <h2>Vos informations :</h2>
+          <p><strong>Nom :</strong> {{ authService.utilisateur()?.nom }}</p>
+          <p><strong>Prénom :</strong> {{ authService.utilisateur()?.prenom }}</p>
+          <p><strong>Email :</strong> {{ authService.utilisateur()?.email }}</p>
+          <p><strong>Rôle :</strong> {{ authService.utilisateur()?.role }}</p>
+        </div>
+      } @else {
+        <p>Chargement de vos informations...</p>
+      }
+
+      <button (click)="logOut()">Déconnexion</button>
+    </div>
+  } @else {
+    <div>
+      <h1>Vous n'êtes pas connecté</h1>
+      <p>Veuillez vous connecter pour accéder au dashboard.</p>
+    </div>
+  }
+</div>

@@ -1,0 +1,764 @@
+// ============================================================
+//  session-component.scss
+//  Angular Material + custom design system
+//  Thème : dark, épuré, typographie forte, accents colorés
+// ============================================================
+
+// ?? Tokens ????????????????????????????????????????????????????
+$bg: #0b0f1a;
+$surface: #111827;
+$surface-2: #1a2235;
+$surface-3: #202d42;
+$border: rgba(255, 255, 255, 0.07);
+$border-2: rgba(255, 255, 255, 0.12);
+
+$accent: #5b8dee;
+$accent-dim: rgba(91, 141, 238, 0.14);
+$accent-glow: rgba(91, 141, 238, 0.3);
+
+$green: #34d399;
+$green-dim: rgba(52, 211, 153, 0.14);
+$amber: #fbbf24;
+$amber-dim: rgba(251, 191, 36, 0.14);
+$red: #f87171;
+$red-dim: rgba(248, 113, 113, 0.14);
+
+$text: #e8edf5;
+$text-soft: #7c8ba1;
+$text-muted: #4a5568;
+
+$font-head: 'Fraunces', serif;
+$font-body: 'DM Sans', sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$radius: 16px;
+$radius-sm: 10px;
+$radius-chip: 20px;
+
+
+// ?? Host ??????????????????????????????????????????????????????
+:host {
+  display: block;
+  font-family: $font-body;
+}
+
+
+// ?? Page shell ????????????????????????????????????????????????
+.se-page {
+  min-height: 100vh;
+  background: $bg;
+  color: $text;
+  padding: 40px 48px 80px;
+  font-family: $font-body;
+
+  background-image: radial-gradient(rgba(91, 141, 238, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+
+  @media (max-width: 900px) {
+    padding: 24px 20px 60px;
+  }
+}
+
+
+// ?? Breadcrumb ????????????????????????????????????????????????
+.se-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 24px;
+  font-size: 0.78rem;
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: $text-soft;
+    text-decoration: none;
+    transition: color 0.18s $ease;
+
+    mat-icon {
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+    }
+
+    &:hover {
+      color: $accent;
+    }
+  }
+
+  &__sep {
+    color: $text-muted;
+    font-size: 17px;
+    width: 17px;
+    height: 17px;
+  }
+
+  &__current {
+    color: $text;
+    font-weight: 600;
+  }
+}
+
+
+// ?? Event banner ?????????????????????????????????????????????
+.se-event-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, #0f2460 0%, #1a3a8f 60%, #1e4db7 100%);
+  border: 1px solid rgba(91, 141, 238, 0.25);
+  border-radius: $radius;
+  padding: 20px 28px;
+  margin-bottom: 36px;
+  color: #fff;
+  box-shadow: 0 4px 32px rgba($accent, .2);
+
+  &__icon {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+  }
+
+  &__title {
+    margin: 0 0 8px;
+    font-family: $font-head;
+    font-size: 1.2rem;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  &__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    opacity: .85;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__count {
+    flex-shrink: 0;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: $radius-sm;
+    padding: 12px 24px;
+  }
+
+  &__count-num {
+    display: block;
+    font-family: $font-head;
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  &__count-lbl {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    opacity: .8;
+  }
+}
+
+
+// ?? Header ????????????????????????????????????????????????????
+.se-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  gap: 20px;
+  flex-wrap: wrap;
+
+  &__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $accent;
+    margin: 0 0 8px;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: $text;
+    margin: 0 0 6px;
+  }
+
+  &__sub {
+    font-size: 0.85rem;
+    color: $text-soft;
+    margin: 0;
+  }
+
+  &__cta {
+    background: linear-gradient(135deg, $accent, #7c6ff7) !important;
+    color: #fff !important;
+    border-radius: $radius-sm !important;
+    font-weight: 700 !important;
+    font-family: $font-body !important;
+    padding: 0 22px !important;
+    height: 44px !important;
+    box-shadow: 0 4px 18px $accent-glow !important;
+    transition: transform 0.18s $ease, box-shadow 0.18s $ease !important;
+    white-space: nowrap;
+
+    &:hover {
+      transform: translateY(-2px) !important;
+      box-shadow: 0 8px 28px $accent-glow !important;
+    }
+
+    mat-icon {
+      margin-right: 6px;
+    }
+  }
+}
+
+
+// ?? Stats strip ???????????????????????????????????????????????
+.se-stats {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.se-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  flex: 1;
+  min-width: 120px;
+  transition: border-color 0.2s $ease, transform 0.18s $ease;
+
+  &:hover {
+    border-color: $border-2;
+    transform: translateY(-2px);
+  }
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.75;
+  }
+
+  &__value {
+    font-family: $font-head;
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    display: block;
+  }
+
+  &__label {
+    font-size: 0.72rem;
+    color: $text-soft;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: block;
+  }
+
+  &--total {
+    border-left: 3px solid $accent;
+
+    mat-icon {
+      color: $accent;
+    }
+
+    .se-stat__value {
+      color: $accent;
+    }
+  }
+
+  &--confirme {
+    border-left: 3px solid $green;
+
+    mat-icon {
+      color: $green;
+    }
+
+    .se-stat__value {
+      color: $green;
+    }
+  }
+
+  &--attente {
+    border-left: 3px solid $amber;
+
+    mat-icon {
+      color: $amber;
+    }
+
+    .se-stat__value {
+      color: $amber;
+    }
+  }
+
+  &--annule {
+    border-left: 3px solid $red;
+
+    mat-icon {
+      color: $red;
+    }
+
+    .se-stat__value {
+      color: $red;
+    }
+  }
+}
+
+
+// ?? Toolbar ???????????????????????????????????????????????????
+.se-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+
+  &__search {
+    flex: 1;
+    min-width: 240px;
+    margin-bottom: -1.25em;
+
+    .mat-mdc-form-field-flex {
+      background: $surface !important;
+    }
+  }
+
+  &__filter {
+    width: 200px;
+    min-width: 160px;
+    margin-bottom: -1.25em;
+  }
+
+  &__views {
+    display: flex;
+    gap: 4px;
+    background: $surface;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    padding: 4px;
+
+    button {
+      color: $text-soft !important;
+      border-radius: 8px !important;
+      width: 36px !important;
+      height: 36px !important;
+      transition: background 0.15s $ease, color 0.15s $ease !important;
+
+      &.is-active {
+        background: $accent-dim !important;
+        color: $accent !important;
+      }
+
+      &:hover:not(.is-active) {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: $text !important;
+      }
+    }
+  }
+}
+
+// Material form field dark overrides
+.se-toolbar {
+  ::ng-deep {
+    .mat-mdc-outlined-field .mdc-notched-outline__leading,
+    .mat-mdc-outlined-field .mdc-notched-outline__notch,
+    .mat-mdc-outlined-field .mdc-notched-outline__trailing {
+      border-color: $border-2 !important;
+    }
+
+    .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+    .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+    .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+      border-color: $accent !important;
+    }
+
+    .mdc-floating-label {
+      color: $text-soft !important;
+      font-family: $font-body;
+    }
+
+    .mat-mdc-input-element {
+      color: $text !important;
+      font-family: $font-body;
+      caret-color: $accent;
+    }
+
+    .mat-mdc-form-field-icon-prefix mat-icon {
+      color: $text-soft;
+    }
+
+    .mat-mdc-select-value-text {
+      color: $text !important;
+      font-family: $font-body;
+    }
+
+    .mat-mdc-form-field-infix {
+      background: $surface;
+      border-radius: $radius-sm;
+    }
+  }
+}
+
+
+// ?? Grid ??????????????????????????????????????????????????????
+.se-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+  animation: se-fade-in 0.3s $ease;
+
+  &--list {
+    grid-template-columns: 1fr;
+    gap: 14px;
+
+    .se-card {
+      flex-direction: row;
+      align-items: stretch;
+
+      .se-card__body {
+        flex: 1;
+      }
+
+      .se-card__desc {
+        display: none;
+      }
+
+      .se-card__meta {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes se-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+// ?? Card ??????????????????????????????????????????????????????
+.se-card {
+  background: $surface !important;
+  border: 1px solid $border !important;
+  border-radius: $radius !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s $ease, transform 0.2s $ease, box-shadow 0.2s $ease !important;
+
+  &:hover {
+    border-color: rgba(91, 141, 238, 0.3) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(91, 141, 238, 0.15) !important;
+  }
+
+  // Top row
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 0;
+  }
+
+  // Status badge
+  &__statut {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: $radius-chip;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+
+    &.statut--confirme {
+      background: $green-dim;
+      color: $green;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+    }
+
+    &.statut--attente {
+      background: $amber-dim;
+      color: $amber;
+      border: 1px solid rgba(251, 191, 36, 0.25);
+    }
+
+    &.statut--annule {
+      background: $red-dim;
+      color: $red;
+      border: 1px solid rgba(248, 113, 113, 0.25);
+    }
+  }
+
+  &__menu-btn {
+    color: $text-soft !important;
+    width: 32px !important;
+    height: 32px !important;
+    opacity: 0;
+    transition: opacity 0.18s $ease !important;
+
+    &:hover {
+      color: $text !important;
+    }
+  }
+
+  &:hover &__menu-btn {
+    opacity: 1;
+  }
+
+  // Body
+  &__body {
+    padding: 16px 18px 10px !important;
+    flex: 1;
+  }
+
+  &__titre {
+    font-family: $font-head;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $text;
+    margin: 0 0 10px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__desc {
+    font-size: 0.82rem;
+    color: $text-soft;
+    line-height: 1.65;
+    margin: 0 0 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__divider {
+    border-color: $border !important;
+    margin: 0 0 14px !important;
+  }
+
+  &__meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+  }
+
+  &__meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: $text-soft;
+
+    mat-icon {
+      font-size: 15px;
+      width: 15px;
+      height: 15px;
+      color: $accent;
+      flex-shrink: 0;
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  // Actions
+  &__actions {
+    padding: 10px 18px 14px !important;
+    border-top: 1px solid $border;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+
+    button {
+      font-family: $font-body !important;
+      font-size: 0.8rem !important;
+      border-color: $border-2 !important;
+      color: $accent !important;
+      border-radius: $radius-sm !important;
+      height: 34px !important;
+
+      &:hover {
+        border-color: $accent !important;
+        background: $accent-dim !important;
+      }
+
+      &[color="warn"] {
+        color: $red !important;
+
+        &:hover {
+          border-color: $red !important;
+          background: $red-dim !important;
+        }
+      }
+
+      mat-icon {
+        font-size: 15px;
+        width: 15px;
+        height: 15px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  &__id {
+    font-size: 0.72rem;
+    color: $text-muted;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  &__created {
+    font-size: 0.72rem;
+    color: $text-muted;
+    flex: 1;
+    margin-left: 4px;
+  }
+}
+
+// Menu danger item (global, mat-menu renders outside component)
+::ng-deep .menu-item--danger {
+  color: $red !important;
+
+  mat-icon {
+    color: $red !important;
+  }
+}
+
+
+// ?? Empty / Loading state ???????????????????????????????????????????????
+.se-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 20px;
+  gap: 14px;
+
+  &__icon {
+    font-size: 64px !important;
+    width: 64px !important;
+    height: 64px !important;
+    color: $text-muted;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: $text;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  &__sub {
+    font-size: 0.88rem;
+    color: $text-soft;
+    margin: 0;
+  }
+
+  button {
+    margin-top: 8px;
+    border-radius: $radius-sm !important;
+    font-family: $font-body !important;
+    font-weight: 700 !important;
+    background: $accent !important;
+    color: #fff !important;
+  }
+}

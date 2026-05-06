@@ -1,0 +1,704 @@
+// ============================================================
+//  home.component.scss
+//  Thème : dark, épuré — cohérent avec evenement.component.scss
+// ============================================================
+
+// ── Tokens (identiques à evenement.component.scss) ────────────
+$bg: #0b0f1a;
+$surface: #111827;
+$surface-2: #1a2235;
+$surface-3: #202d42;
+$border: rgba(255, 255, 255, 0.07);
+$border-2: rgba(255, 255, 255, 0.12);
+
+$accent: #5b8dee;
+$accent-dim: rgba(91, 141, 238, 0.14);
+$accent-glow: rgba(91, 141, 238, 0.3);
+
+$green: #34d399;
+$green-dim: rgba(52, 211, 153, 0.14);
+$amber: #fbbf24;
+$amber-dim: rgba(251, 191, 36, 0.14);
+$red: #f87171;
+$red-dim: rgba(248, 113, 113, 0.14);
+
+$text: #e8edf5;
+$text-soft: rgb(245, 232, 237);
+$text-muted: rgba(232, 237, 245, 0.38);
+
+$font-head: 'Fraunces', serif;
+$font-body: 'DM Sans', sans-serif;
+$ease: cubic-bezier(0.4, 0, 0.2, 1);
+$radius: 16px;
+$radius-sm: 10px;
+$radius-chip: 20px;
+
+// ── Host ──────────────────────────────────────────────────────
+:host {
+  display: block;
+  font-family: $font-body;
+}
+
+// ── Page shell ────────────────────────────────────────────────
+.home-page {
+  min-height: 100vh;
+  background: $bg;
+  color: $text;
+  font-family: $font-body;
+  background-image: radial-gradient(rgba(91, 141, 238, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+// ── Boutons ───────────────────────────────────────────────────
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 26px;
+  height: 46px;
+  background: linear-gradient(135deg, $accent, #7c6ff7);
+  color: #fff;
+  border: none;
+  border-radius: $radius-sm;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 18px $accent-glow;
+  transition: transform 0.18s $ease, box-shadow 0.18s $ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px $accent-glow;
+  }
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px;
+  height: 46px;
+  background: transparent;
+  color: $text-soft;
+  border: 1px solid $border-2;
+  border-radius: $radius-sm;
+  font-family: $font-body;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s $ease, color 0.18s $ease, background 0.18s $ease;
+
+  &:hover {
+    border-color: $accent;
+    color: $accent;
+    background: $accent-dim;
+  }
+}
+
+// ── HERO ──────────────────────────────────────────────────────
+.home-hero {
+  position: relative;
+  padding: 72px 48px 56px;
+  overflow: hidden;
+
+  @media (max-width: 900px) {
+    padding: 48px 24px 40px;
+  }
+
+  // Glow de fond derrière le titre
+  &__glow {
+    position: absolute;
+    top: -120px;
+    left: -80px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91, 141, 238, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  &__content {
+    position: relative;
+    max-width: 680px;
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $accent;
+    margin-bottom: 20px;
+  }
+
+  &__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $green;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: clamp(2.8rem, 6vw, 4.2rem);
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    line-height: 1.05;
+    margin: 0 0 18px;
+    color: $text;
+  }
+
+  &__title-accent {
+    color: $accent;
+    display: inline-block;
+
+    // Soulignement décoratif
+    &::after {
+      content: '';
+      display: block;
+      left: 0;
+      bottom: -4px;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, $accent, #7c6ff7);
+      border-radius: 2px;
+    }
+  }
+
+  &__sub {
+    font-size: 1rem;
+    color: $text-soft;
+    line-height: 1.65;
+    margin: 0 0 32px;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  // Stats flottantes à droite
+  &__stats {
+    position: absolute;
+    top: 72px;
+    right: 48px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: $surface;
+    border: 1px solid $border-2;
+    border-radius: $radius;
+    padding: 18px 28px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: fade-in-right 0.5s $ease both;
+    animation-delay: 0.2s;
+
+    @media (max-width: 1100px) {
+      position: static;
+      margin-top: 40px;
+      display: inline-flex;
+    }
+
+    @media (max-width: 600px) {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+    }
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 20px;
+  }
+
+  &__stat-value {
+    font-family: $font-head;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: $accent;
+    line-height: 1;
+
+    &--green {
+      color: $green;
+    }
+
+    &--amber {
+      color: $amber;
+    }
+  }
+
+  &__stat-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-soft;
+  }
+
+  &__stat-divider {
+    width: 1px;
+    height: 36px;
+    background: $border-2;
+  }
+}
+
+// ── Sections communes ─────────────────────────────────────────
+.home-section {
+  padding: 0 48px 64px;
+
+  @media (max-width: 900px) {
+    padding: 0 24px 48px;
+  }
+
+  &--last {
+    padding-bottom: 80px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  &__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $accent;
+    background: $accent-dim;
+    border: 1px solid rgba(91, 141, 238, 0.2);
+    border-radius: $radius-chip;
+    padding: 4px 12px;
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: $text;
+    margin: 0;
+    flex: 1;
+  }
+
+  &__link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $accent;
+    text-decoration: none;
+    transition: opacity 0.15s $ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+// ── NOTIFICATIONS FEED ────────────────────────────────────────
+.notif-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.notif-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 20px;
+  background: $surface;
+  border: 1px dashed $border-2;
+  border-radius: $radius;
+  color: $text-soft;
+  font-size: 0.9rem;
+
+  &__icon {
+    font-size: 2rem;
+  }
+}
+
+.notif-card {
+  display: flex;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+  transition: border-color 0.2s $ease, transform 0.18s $ease, box-shadow 0.18s $ease;
+  animation: fade-in 0.3s $ease both;
+
+  &:hover {
+    border-color: $border-2;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  // Barre colorée à gauche selon le type
+  &__bar {
+    width: 4px;
+    flex-shrink: 0;
+    background: $accent;
+
+    &--info {
+      background: $accent;
+    }
+
+    &--success {
+      background: $green;
+    }
+
+    &--warning {
+      background: $amber;
+    }
+
+    &--danger {
+      background: $red;
+    }
+  }
+
+  &__body {
+    padding: 18px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: $radius-chip;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+
+    &--info {
+      background: $accent-dim;
+      color: $accent;
+    }
+
+    &--success {
+      background: $green-dim;
+      color: $green;
+    }
+
+    &--warning {
+      background: $amber-dim;
+      color: $amber;
+    }
+
+    &--danger {
+      background: $red-dim;
+      color: $red;
+    }
+  }
+
+  &__unread-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $accent;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  &__time {
+    margin-left: auto;
+    font-size: 0.77rem;
+    color: $text-muted;
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $text;
+    margin: 0;
+  }
+
+  &__message {
+    font-size: 0.87rem;
+    color: $text-soft;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__read-btn {
+    align-self: flex-start;
+    padding: 4px 14px;
+    background: transparent;
+    border: 1px solid $border-2;
+    border-radius: $radius-chip;
+    color: $text-soft;
+    font-family: $font-body;
+    font-size: 0.77rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s $ease, color 0.15s $ease, background 0.15s $ease;
+
+    &:hover {
+      border-color: $accent;
+      color: $accent;
+      background: $accent-dim;
+    }
+  }
+
+  // Non lu — légère mise en valeur
+  &--unread {
+    background: $surface-2;
+    border-color: rgba(91, 141, 238, 0.18);
+  }
+}
+
+// ── UPCOMING EVENTS ───────────────────────────────────────────
+.upcoming-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upcoming-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  text-decoration: none;
+  color: $text;
+  transition: border-color 0.2s $ease, transform 0.18s $ease, background 0.18s $ease;
+
+  &:hover {
+    border-color: rgba(91, 141, 238, 0.3);
+    transform: translateX(4px);
+    background: $surface-2;
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    background: $accent-dim;
+    border: 1px solid rgba(91, 141, 238, 0.25);
+    border-radius: $radius-sm;
+    flex-shrink: 0;
+  }
+
+  &__day {
+    font-family: $font-head;
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: $accent;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  &__month {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $accent;
+    opacity: 0.75;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__titre {
+    font-family: $font-head;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $text;
+    margin: 0 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__lieu {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.95rem;
+    color: $text-soft;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Réutilise les classes statut existantes (statut--confirme, etc.)
+  &__statut {
+    padding: 4px 12px;
+    border-radius: $radius-chip;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+}
+
+.upcoming-empty {
+  padding: 32px 20px;
+  text-align: center;
+  color: $text-soft;
+  font-size: 0.88rem;
+
+  a {
+    color: $accent;
+    font-weight: 700;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// ── RACCOURCIS ────────────────────────────────────────────────
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.shortcut-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 22px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  text-decoration: none;
+  color: $text;
+  cursor: pointer;
+  transition: border-color 0.2s $ease, transform 0.2s $ease, box-shadow 0.2s $ease;
+
+  &:hover {
+    border-color: $border-2;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  // Carte principale avec accent gradient
+  &--accent {
+    background: linear-gradient(135deg, rgba(91, 141, 238, 0.18), rgba(124, 111, 247, 0.12));
+    border-color: rgba(91, 141, 238, 0.3);
+
+    &:hover {
+      border-color: rgba(91, 141, 238, 0.55);
+      box-shadow: 0 12px 32px rgba(91, 141, 238, 0.2);
+    }
+
+    .shortcut-card__title {
+      color: $accent;
+    }
+  }
+
+  &__icon {
+    font-size: 2rem;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $surface-2;
+    border-radius: $radius-sm;
+    flex-shrink: 0;
+    transition: transform 0.2s $ease;
+  }
+
+  &:hover &__icon {
+    transform: scale(1.1) rotate(-4deg);
+  }
+
+  &__title {
+    font-family: $font-head;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: $text;
+    margin: 0 0 4px;
+  }
+
+  &__sub {
+    font-size: 0.8rem;
+    color: $text-soft;
+    margin: 0;
+  }
+}
+
+// ── Animations ────────────────────────────────────────────────
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.75);
+  }
+}

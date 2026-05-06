@@ -1,0 +1,71 @@
+<div class="login-page">
+
+  <!-- Orbs décoratifs -->
+  <div class="login-page__orb login-page__orb--1"></div>
+  <div class="login-page__orb login-page__orb--2"></div>
+
+  <div class="login-card">
+
+    <!-- Logo -->
+    <div class="login-card__brand">
+      <div class="login-card__brand-icon">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="10" fill="currentColor"/>
+          <path d="M8 22L14 10L20 18L23 14L26 22H8Z" fill="white" opacity="0.9"/>
+        </svg>
+      </div>
+      <span class="login-card__brand-name">FilRouge<strong>Beem</strong></span>
+    </div>
+
+    <!-- Titre -->
+    <div class="login-card__header">
+      <h1 class="login-card__title">Bienvenue</h1>
+      <p class="login-card__sub">Connectez-vous pour accéder à votre espace</p>
+    </div>
+
+    <!-- Bouton Google -->
+    <button class="login-card__google-btn" (click)="signInWithGoogle()">
+      <img
+        src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
+        alt="Google"
+        class="login-card__google-icon"
+      />
+      <span>Continuer avec Google</span>
+    </button>
+
+    <!-- Séparateur -->
+    <div class="login-card__separator">
+      <span>accès sécurisé</span>
+    </div>
+
+    <!-- Features -->
+    <ul class="login-card__features">
+      <li class="login-card__feature">
+        <div class="login-card__feature-icon">
+          <mat-icon>event</mat-icon>
+        </div>
+        <span>Gérez vos événements</span>
+      </li>
+      <li class="login-card__feature">
+        <div class="login-card__feature-icon">
+          <mat-icon>video_library</mat-icon>
+        </div>
+        <span>Suivez vos sessions</span>
+      </li>
+      <li class="login-card__feature">
+        <div class="login-card__feature-icon">
+          <mat-icon>notifications</mat-icon>
+        </div>
+        <span>Recevez des notifications</span>
+      </li>
+    </ul>
+
+    <!-- Footer -->
+    <p class="login-card__footer">
+      En vous connectant, vous acceptez nos
+      <a href="#">conditions d'utilisation</a> et notre
+      <a href="#">politique de confidentialité</a>.
+    </p>
+
+  </div>
+</div>
