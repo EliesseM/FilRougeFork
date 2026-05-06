@@ -51,7 +51,7 @@
         - uses: actions/checkout@v4
 
         - name: SonarQube Quality Gate check
-          uses: sonarsource/sonarqube-quality-gate-action@master
+          uses: sonarsource/sonarqube-quality-gate-action@v1.2.0
           timeout-minutes: 2
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
