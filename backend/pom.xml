@@ -21,6 +21,13 @@
         <sonar.organization>eliessem</sonar.organization>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/school-by-hiit/portail-suivi-formation-2022</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <!-- Spring -->
         <dependency>
